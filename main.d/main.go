@@ -22,12 +22,13 @@ func main() {
 }
 
 func testHandler(w http.ResponseWriter, r *http.Request) {
-	// vars := mux.Vars(r)
-	// fmt.Println(vars)
+	vars := mux.Vars(r)
+	fmt.Println(vars)
 
-	// filter, err := juggler.GetFilterParamMap(r)
-	str := `{"where": {"username": "ekbessah"}}`
-	filter, err := juggler.GetFilterParamMapFromJSONString(str)
+	// str := `{"where": {"username": "ekbessah"}}`
+
+	filter, err := juggler.GetFilterParamMap(r)
+	// filter, err := juggler.GetFilterParamMapFromJSONString(str)
 	fmt.Println(filter.Where)
 	if err != nil {
 		panic(err)

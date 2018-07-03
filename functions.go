@@ -15,6 +15,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 )
 
@@ -62,6 +63,16 @@ func GetFilterParamMap(r *http.Request) (Filter, error) {
 
 	if err := json.Unmarshal(byt, &filter); err != nil {
 		return filter, fmt.Errorf("Value is not an object")
+	}
+
+	// Get vars from request and check whether we're finding by id
+	// If so do not filter with WHERE, ORDER, LIMIT and OFFSET
+	vars := mux.Vars(r)
+	if _, ok := vars["id"]; ok {
+		filter.Where = nil
+		filter.Order = nil
+		filter.Limit = nil
+		filter.Offset = nil
 	}
 
 	return filter, nil
