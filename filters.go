@@ -47,6 +47,120 @@ func whereFilter(key string, value interface{}, opk string, tx *gorm.DB, v ...st
 	return tx
 }
 
+// Todo: Change this to a recursive function
+// http://mindbowser.com/golang-go-with-gorm-2/
+func includeFilter(res *Filter, tx *gorm.DB) *gorm.DB {
+	if res.Include != nil {
+		tx = include(res.Include, tx)
+	}
+	return tx
+}
+
+// Test Cases:
+//	filter={"limit": 1, "include": "StudOther"}
+//	filter={"limit": 1, "include": {"StudOther": "religion"}}
+//	filter={"limit": 1, "include": ["StudDetail", "studOther"]}
+//	filter={"limit": 1, "include": [{"StudOther": "religion"}]}
+//	filter={"limit": 4, "include": ["studDetail", {"StudOther": "religion"}]}
+func include(field interface{}, tx *gorm.DB) *gorm.DB {
+	fmt.Println(field)
+	switch reflect.TypeOf(field).Kind().String() {
+	case "string":
+		// fmt.Println("==>", field.(string))
+		tx = tx.Preload(ToCamel(field.(string)))
+	case "map":
+		for ikey, ivalue := range field.(map[string]interface{}) {
+			// fmt.Println("key=====>", ToCamel(ikey))
+			tx = tx.Preload(ToCamel(ikey))
+
+			if reflect.TypeOf(ivalue).Kind().String() == "string" {
+				// fmt.Println("val=====>", ivalue)
+				tx = tx.Preload(ToCamel(ikey) + "." + ToCamel(ivalue.(string))) // Nested Relationship : https://github.com/jinzhu/gorm/issues/392
+			} else {
+				return include(ivalue, tx)
+			}
+		}
+	case "slice":
+		for _, model := range field.([]interface{}) {
+			if reflect.TypeOf(model).Kind().String() == "string" {
+				// fmt.Println(">==>", model)
+				tx = tx.Preload(ToCamel(model.(string)))
+			} else if reflect.TypeOf(model).Kind().String() == "map" ||
+				reflect.TypeOf(field).Kind().String() == "slice" {
+				return include(model, tx)
+			}
+		}
+	default:
+		return nil
+	}
+
+	return tx
+}
+
+// func includeFilter(res *Filter, tx *gorm.DB) *gorm.DB {
+// 	fmt.Println(res.Include)
+// 	if res.Include != nil {
+// 		switch reflect.TypeOf(res.Include).Kind().String() {
+// 		case "string": // filter={"include": "emma"}
+// 			fmt.Println(res.Include.(string))
+// 			// tx = tx.Preload(ToCamel(res.Include.(string)))
+// 		case "slice": // filter={"include": ["kofi", "emma"]}
+// 			for _, model := range res.Include.([]interface{}) {
+// 				// if reflect.TypeOf(model).Kind().String() == "string" {
+// 				// fmt.Println(ToCamel(model.(string)))
+// 				// 	// tx = tx.Preload(ToCamel(model.(string)))
+// 				// }
+
+// 				switch reflect.TypeOf(model).Kind().String() {
+// 				case "string":
+// 					fmt.Println(model.(string))
+// 				case "slice":
+// 					for _, model := range model.([]interface{}) {
+// 						if reflect.TypeOf(model).Kind().String() == "string" {
+// 							fmt.Println(ToCamel(model.(string)))
+// 							// tx = tx.Preload(ToCamel(model.(string)))
+// 						}
+// 					}
+// 				case "map":
+// 					for jkey, jvalue := range model.(map[string]interface{}) {
+// 						fmt.Println(ToCamel(jkey))
+// 						fmt.Println(ToCamel(jvalue.(string)))
+// 						// tx = tx.Preload(ToCamel(ikey))
+// 					}
+// 				}
+// 			}
+// 		case "map": // filter={"include": {"owner": "emma"}}
+// 			// fmt.Println(res.Include)
+// 			for ikey, ivalue := range res.Include.(map[string]interface{}) {
+// 				fmt.Println(ToCamel(ikey))
+// 				fmt.Println((ivalue))
+// 				// tx = tx.Preload(ToCamel(ikey))
+
+// 				switch reflect.TypeOf(ivalue).Kind().String() {
+// 				case "string":
+// 					fmt.Println(ivalue.(string))
+// 				case "slice":
+// 					for _, model := range ivalue.([]interface{}) {
+// 						fmt.Println(model)
+// 						// if reflect.TypeOf(model).Kind().String() == "string" {
+// 						// 	fmt.Println(ToCamel(model.(string)))
+// 						// 	// tx = tx.Preload(ToCamel(model.(string)))
+// 						// }
+// 					}
+// 				case "map":
+// 					for jkey, jvalue := range ivalue.(map[string]interface{}) {
+// 						fmt.Println(ToCamel(jkey))
+// 						fmt.Println(ToCamel(jvalue.(string)))
+// 						// tx = tx.Preload(ToCamel(ikey))
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	return tx
+// }
+
 func limitFilter(res *Filter, tx *gorm.DB) *gorm.DB {
 	datLimit := res.Limit
 	if datLimit != nil && reflect.TypeOf(datLimit).Kind().String() == "float64" {

@@ -25,3 +25,16 @@ var (
 		"nlike": "not like", // passed
 	}
 )
+
+// CRUD
+const (
+	Create     = "Create"
+	Upsert     = "Upsert"
+	Find       = "Find"
+	FindByID   = "FindByID"
+	FindOne    = "FindOne"
+	Count      = "Count"
+	Exists     = "Exists"
+	Update     = "Update"
+	DeleteByID = "DeleteByID"
+)

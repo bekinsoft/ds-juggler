@@ -1,14 +1,14 @@
 package main
 
 import (
-	"eritars-deprecated/model"
+	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 
 	juggler "bekinsoft.com/ds-juggler"
 	"bekinsoft.com/eritars/iam-ms/datasource"
+	"bekinsoft.com/eritars/srm-ms/model"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 )
@@ -29,13 +29,14 @@ func testHandler(w http.ResponseWriter, r *http.Request) {
 
 	filter, err := juggler.GetFilterParamMap(r)
 	// filter, err := juggler.GetFilterParamMapFromJSONString(str)
-	fmt.Println(filter.Where)
+	filter.Valid = true
+	fmt.Println(filter)
 	if err != nil {
 		panic(err)
 	}
+	var mod model.StudMain
 
 	if filter.Valid {
-		var mod model.AuthUsers
 
 		tx := database().Begin()
 		tx.LogMode(true)
@@ -61,13 +62,14 @@ func testHandler(w http.ResponseWriter, r *http.Request) {
 
 	// In the future we could report back on the status of our DB, or our cache
 	// (e.g. Redis) by performing a simple PING, and include them in the response.
-	io.WriteString(w, `{"alive": true}`)
+	// io.WriteString(w, `{"alive": true}`)
+	json.NewEncoder(w).Encode(mod)
 }
 
 func database() *gorm.DB {
 	var DBClient datasource.IGormClient
 	DBClient = &datasource.GormClient{}
-	DBClient.SetupDBForTest("root@localhost:26257/eritars_iam?sslmode=disable&charset=utf8&parseTime=True")
+	DBClient.SetupDBForTest("root@192.168.99.100:26257/eritars_srm?sslmode=disable&charset=utf8&parseTime=True")
 	// DBClient.SetupDBForTest("root@41.74.82.219:26257/eritars_iam?sslmode=disable&charset=utf8&parseTime=True")
 	db := DBClient.GetInstance()
 

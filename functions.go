@@ -19,7 +19,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Filter model
+// Filter specify criteria for the returned data set
 type Filter struct {
 	Where   interface{}
 	Limit   interface{}
@@ -29,6 +29,14 @@ type Filter struct {
 	Fields  interface{}
 
 	Valid bool
+}
+
+// FilterRequest find, findByID, count anad exists request
+type FilterRequest struct {
+	Filter interface{}
+	Method string
+	Params interface{}
+	Body   interface{}
 }
 
 // GetFilterParamMap returns a map of the filter request
@@ -150,6 +158,7 @@ func FilterQuery(f Filter, tx *gorm.DB) (*gorm.DB, error) {
 	tx = offsetFilter(&f, tx)
 	tx = limitFilter(&f, tx)
 	tx = fieldFilter(&f, tx)
+	tx = includeFilter(&f, tx)
 
 	// tx.Find(&mod)
 	// fmt.Println(mod)
