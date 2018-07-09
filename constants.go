@@ -2,12 +2,12 @@ package juggler
 
 var (
 	filters = []string{
-		"fields", // not implemented
-		"include",
-		"limit",  // passed
-		"order",  // passed
-		"offset", // or skip // passed
-		"where",  // passed
+		"fields",  // not implemented
+		"include", // passed
+		"limit",   // passed
+		"order",   // passed
+		"offset",  // or skip // passed
+		"where",   // passed
 	}
 	operators = map[string]string{
 		"=":   "=",   // passed
