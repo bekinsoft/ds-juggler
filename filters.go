@@ -18,6 +18,7 @@ func whereFilter(key string, value interface{}, opk string, tx *gorm.DB, v ...st
 		opk = "="
 	}
 	opr = " " + strings.ToUpper(operators[opk])
+	key = ToSnakeCase(key) // Convert lowerCamelCase to snake_case for sql field to work
 	// fmt.Println(key+opk+" ?", value)
 	switch reflect.ValueOf(value).Kind().String() {
 	case "string":

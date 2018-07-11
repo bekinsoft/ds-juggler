@@ -33,10 +33,11 @@ type Filter struct {
 
 // FilterRequest find, findByID, count anad exists request
 type FilterRequest struct {
-	Filter interface{}
-	Method string
-	Params interface{}
-	Body   interface{}
+	Filter   interface{}
+	Method   string
+	Params   interface{}
+	Body     interface{}
+	RawQuery string
 }
 
 // GetFilterParamMap returns a map of the filter request
@@ -52,7 +53,7 @@ func GetFilterParamMap(r *http.Request) (Filter, error) {
 		return filter, nil
 	}
 
-	fmt.Println(urlQuery)
+	// fmt.Println(urlQuery)
 	decode, err := url.PathUnescape(urlQuery)
 
 	// fmt.Println(decode)
