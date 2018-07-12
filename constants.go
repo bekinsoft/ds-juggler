@@ -28,13 +28,15 @@ var (
 
 // CRUD
 const (
-	Create     = "Create"
-	Upsert     = "Upsert"
-	Find       = "Find"
-	FindByID   = "FindByID"
-	FindOne    = "FindOne"
-	Count      = "Count"
-	Exists     = "Exists"
-	Update     = "Update"
-	DeleteByID = "DeleteByID"
+	Create       = "Create"
+	Upsert       = "Upsert"
+	Find         = "Find"
+	FindByID     = "FindByID"
+	FindOne      = "FindOne"
+	Count        = "Count"
+	Exists       = "Exists"
+	Update       = "Update"
+	DeleteByID   = "DeleteByID"
+	GetByParams  = "GetByParams"  // Used by remote or custom GET methods
+	PostByParams = "PostByParams" // Used by remove or custom POST methods
 )

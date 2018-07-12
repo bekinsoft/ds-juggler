@@ -33,11 +33,9 @@ type Filter struct {
 
 // FilterRequest find, findByID, count anad exists request
 type FilterRequest struct {
-	Filter   interface{}
-	Method   string
-	Params   interface{}
-	Body     interface{}
-	RawQuery string
+	Filter, Body     interface{}
+	Method, RawQuery string
+	Params           map[string]string
 }
 
 // GetFilterParamMap returns a map of the filter request
