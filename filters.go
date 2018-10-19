@@ -1,3 +1,10 @@
+/*
+ * @author    Emmanuel Kofi Bessah
+ * @email     ekbessah@uew.edu.gh
+ * @created   Sat Jun 30 2018 11:41:21
+ * @copyright © 2018 University of Education, Winneba
+ */
+
 package juggler
 
 import (
@@ -64,7 +71,7 @@ func includeFilter(res *Filter, tx *gorm.DB) *gorm.DB {
 //	filter={"limit": 1, "include": [{"StudOther": "religion"}]}
 //	filter={"limit": 4, "include": ["studDetail", {"StudOther": "religion"}]}
 func include(field interface{}, tx *gorm.DB) *gorm.DB {
-	fmt.Println(field)
+	// fmt.Println(field)
 	switch reflect.TypeOf(field).Kind().String() {
 	case "string":
 		// fmt.Println("==>", field.(string))

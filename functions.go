@@ -36,6 +36,7 @@ type FilterRequest struct {
 	Filter, Body     interface{}
 	Method, RawQuery string
 	Params           map[string]string
+	Header           http.Header
 }
 
 // GetFilterParamMap returns a map of the filter request
