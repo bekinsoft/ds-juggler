@@ -2,7 +2,6 @@
  * @author    Emmanuel Kofi Bessah
  * @email     ekbessah@uew.edu.gh
  * @created   Sat Jun 30 2018 11:41:21
- * @copyright © 2018 University of Education, Winneba
  */
 
 package juggler

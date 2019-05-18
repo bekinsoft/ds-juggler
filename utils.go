@@ -2,7 +2,6 @@
  * @author    Emmanuel Kofi Bessah
  * @email     ekbessah@uew.edu.gh
  * @created   Sat Jul 07 2018 23:00:35
- * @copyright © 2018 University of Education, Winneba
  */
 
 package juggler
@@ -16,19 +15,6 @@ import (
 func JoinStrings(values ...string) string {
 	return strings.Join(values, "")
 }
-
-// BytesToSize ...
-// func BytesToSize(bytes float64) string {
-// 	sizes := []string{"Bytes", "KB", "MB", "GB", "TB"}
-// 	if bytes == 0 {
-// 		return "0 Byte"
-// 	}
-// 	i := int(math.Floor(math.Log(bytes) / math.Log(1024)))
-
-// 	return strconv.FormatFloat(math.Round((bytes / (math.Pow(1024, i) / 100))))
-
-// 	// return string(i)
-// }
 
 // ToSnake ... Converts a string to snake_case
 // func ToSnake(s string) string {

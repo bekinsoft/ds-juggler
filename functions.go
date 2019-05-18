@@ -2,7 +2,6 @@
  * @author    Emmanuel Kofi Bessah
  * @email     ekbessah@uew.edu.gh
  * @created   Sat Jun 30 2018 11:41:21
- * @copyright © 2018 University of Education, Winneba
  */
 
 package juggler
@@ -89,6 +88,10 @@ func GetFilterParamMap(r *http.Request) (Filter, error) {
 // GetFilterParamMapFromJSONString returns a map of the filter request when given json string
 func GetFilterParamMapFromJSONString(jsonstr string) (Filter, error) {
 	filter := Filter{Valid: true}
+
+	if len(strings.Trim(jsonstr, "")) == 0 {
+		return filter, nil
+	}
 
 	byt := []byte(jsonstr)
 
