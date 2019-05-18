@@ -1,4 +1,6 @@
-module bekinsoft.com/ds-juggler
+module github.com/bekinsoft/ds-juggler
+
+go 1.12
 
 require (
 	github.com/gorilla/mux v1.7.2
