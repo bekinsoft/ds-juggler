@@ -7,7 +7,6 @@
 package juggler
 
 import (
-	"fmt"
 	"reflect"
 	"strings"
 
@@ -202,10 +201,12 @@ func orderFilter(res *Filter, tx *gorm.DB) *gorm.DB {
 }
 
 func fieldFilter(res *Filter, tx *gorm.DB) *gorm.DB {
-	if res.Fields != nil {
-		datFields := res.Fields.(map[string]interface{})
-		for key, value := range datFields {
-			fmt.Println(key, "=>", value)
+	fields := res.Fields
+	if fields != nil {
+		if reflect.TypeOf(fields).Kind().String() == "string" {
+			fields := strings.Split(strings.TrimSpace(fields.(string)), ",")
+			tx = tx.Select(fields)
+		} else {
 			// Will be implemented later
 		}
 	}
